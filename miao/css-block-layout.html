@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0px;
+            padding: 0px;
+        }
+        header{
+            background-color:black;
+            color: white;
+        }
+        .topbar_body{
+            width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .footer_body{
+            width: 600px;
+            margin-left: auto;
+            margin-right: auto; 
+        }
+        .footer_p{
+            text-align: center;
+        }
+        footer{
+            background-color: #ee82ee;
+        }
+        .main{
+            width: 600px;
+            margin-left: auto;
+            margin-right: auto; 
+        }
+        .main_p{
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+        ul{
+            width: 600px;
+            padding: 0px;
+            list-style-type:none;
+        }
+        .box li{
+            border: 3px solid;
+            width:174px;
+            height: 34px;
+            text-align: center;
+            line-height: 34px;
+            margin-bottom: 15px;
+            background-color: pink;
+        }
+        .box li:nth-child(n+5){
+            margin-left: 210px;
+        }
+
+        .box li:nth-child(n+9){
+            margin-left: 420px;
+        }
+        .box li:nth-child(4n+5){
+            margin-top: -220px;
+        }
+
+
+
+        .box li:hover{
+            background-color: red;
+        }
+        .link li{
+            border-bottom: 1px dotted;
+        }
+        ul.link{
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="topbar_body">
+                <span>hello world 请调整浏览器窗口大小查看效果</span>
+        </div>
+    </header>
+
+    <div class="main">
+        <p class="main_p">
+            页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px
+        </p>
+        <ul class="box">
+            <li>宽180高40(包含边框)</li>
+            <li>水平间隙30px</li>
+            <li>垂直间隙15px</li>
+            <li>边框宽度3px</li>
+            
+                <li>产品</li>
+                <li>产品</li>
+                <li>产品</li>
+                <li>产品</li>
+            
+           
+                <li>产品</li>
+                <li>产品</li>
+                <li>产品</li>
+                <li>产品</li>
+          
+        </ul>
+        <ul class="link">
+            <li>link</li>
+            <li>link</li>
+            <li>link</li>
+            <li>link</li>
+            <li>link</li>
+        </ul>
+    </div>
+
+    <footer>
+        <div class="footer_body">
+            <p class="footer_p"> ©版权所有</p>
+            <p class="footer_p"> 本页所有布局均使用块元素</p>
+        </div>
+    </footer>
+
+
+</body>
+</html>
