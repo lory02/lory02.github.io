@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .aside {
+            width: 20%;
+            height: 100%;
+            background-color: pink;
+            border: 1px solid;
+            position: absolute;
+            top: 0;
+        }
+
+        .aside_m {
+            left: 60%;
+        }
+
+        .aside_r {
+            right: 0;
+        }
+
+        .main {
+            width: 40%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 20%
+        }
+
+        .top {
+            width: 100%;
+            height: 25%;
+            background-color: green;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="aside_l aside"></div>
+        <div class="main">
+            <div class="top"></div>
+        </div>
+        <div class="aside_m aside"></div>
+        <div class="aside_r aside"></div>
+    </div>
+</body>
+
+</html>

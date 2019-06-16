@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        div {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        header {
+            height: 100px;
+            width: 100%;
+            background-color: tan;
+        }
+
+        section {
+            position: absolute;
+            top: 100px;
+            width: 100%;
+            height: calc(100% - 100px);
+        }
+
+        aside {
+            width: 200px;
+            height: 100%;
+            background-color: green;
+            position: absolute;
+        }
+
+        main {
+            width: calc(100% - 200px);
+            position: absolute;
+            left: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <header></header>
+        <section>
+            <aside></aside>
+            <main>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad ratione sunt ipsa officia amet, porro
+                cumque eveniet laborum quidem beatae debitis incidunt. Assumenda minus doloribus aspernatur eius culpa,
+                ratione sit!</main>
+        </section>
+    </div>
+</body>
+
+</html>
