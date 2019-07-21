@@ -31,9 +31,8 @@ var lory02 = function (){
     return arr.filter(item => args.every(val => !val.includes(item)))
   }
 
-  function drop(arr, n) {
-    arr.splice(0,n)
-    return arr
+  function drop(arr, n = 1) {
+    return arr.splice(n)
   }
 
   function dropRight(arr, n = 1) {
@@ -49,7 +48,15 @@ var lory02 = function (){
   }
 
   function flattenDeep(arr) {
-    return flattenDepth(arr,Infinity)
+    let res = []
+    for(let item of arr) {
+      if(Array.isArray(item)){
+        let flattened = flattenDeep(item)  
+        res.push(...flattened) 
+      }else {
+        res.push(item)
+      }
+    }
   }
 
   function flattenDepth(arr , depth = 1) {
@@ -79,6 +86,56 @@ var lory02 = function (){
     return args[0].filter(item => args.every( val => val.includes(item)))
   }
 
+  function join(array, separator = ',') {
+    var result =''
+    array.slice(0,array.length-1).forEach(val => {
+      result = result + val + separator
+    })
+    return result + array[array.length - 1]
+  }
+
+  function last(array) {
+    return array[array.length - 1]
+  }
+
+  function lastIndexOf(array, value, fromIndex=array.length-1) {
+    for(var i = fromIndex; i >= 0; i--){
+      if(array[i] === value){
+        return i
+      }
+    }
+    return -1
+  }
+
+  function pull(array, ...values) {
+    return array.filter(item => !values.includes(item))
+  }
+
+  function reverse(array) {
+    var res=[]
+    while(array.length){
+      res.push(array.pop())
+    }
+    return res
+  }
+
+  function sortedIndex(array, value) {
+    for(let idx in array){
+      if(array[idx] >= value){
+        return idx 
+      }
+    }
+  }
+
+  function indexOf(array, value, fromIndex=0) {
+    for(let i = fromIndex; i < array.length; i++){
+      if(array[i] === value){
+        return i
+      }
+    }
+    return -1
+  }
+
   return {
     compact,
     chunk,
@@ -93,5 +150,12 @@ var lory02 = function (){
     head,
     initial,
     intersection,
+    join,
+    last,
+    lastIndexOf,
+    pull,
+    reverse,
+    sortedIndex,
+    indexOf,
   }
 }()
