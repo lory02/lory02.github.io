@@ -31,6 +31,28 @@ var lory02 = function (){
     return arr.filter(item => args.every(val => !val.includes(item)))
   }
 
+  function differenceWith(array, ...values){
+    var comparator = values[values.length - 1]
+    var args = [].concat(...values.slice(0,values.length-1))
+    
+    if(typeof comparator == 'function'){
+      let ans = array.filter(val => {
+        let flag = true
+        for(var i =0; i< args.length; i++){
+          if(comparator(args[i],val)){
+            flag = false
+          }
+        }
+        return flag
+      })
+      return ans
+    }else{
+      return difference(array,values)
+    }
+  }
+
+
+
   function drop(arr, n = 1) {
     return arr.splice(n)
   }
@@ -136,6 +158,92 @@ var lory02 = function (){
     return -1
   }
 
+  function uniq(array) {
+    var res = []
+    array.forEach(val => {
+      if(!res.includes(val)){
+        res.push(val)
+      }
+    })
+    return res
+  }
+
+  function uniqBy(array, iteratee=_.identity){
+    var res = []
+    var map = []
+    if(typeof iteratee == 'string'){
+      array.forEach(val => {
+        var v = val[iteratee]
+        if(!map.includes(v)){
+          map.push(v)
+          res.push(val)
+        }
+      })
+    } else {
+      array.forEach(val => {
+        var v = iteratee(val)
+        if(!map.includes(v)){
+          map.push(v)
+          res.push(val)
+        }
+      })
+    }
+    return res
+  }
+
+  function union(...arrays) {
+    let ans = []
+    let array=[].concat(...arrays)
+    array.forEach(val => {
+      if(!ans.includes(val)){
+        ans.push(val)
+      }
+    })
+    return ans
+  }
+
+  function unionBy(...arrays) {
+    let iteratee = last(arrays)  
+    let rest = flatten(arrays.slice(0,arrays.length - 1)) 
+    let ans = [] 
+    let map = []
+  
+    if(typeof iteratee == 'string'){
+      rest.forEach(val => {
+        var v = val[iteratee]
+        if(!map.includes(v)){
+          map.push(v)
+          ans.push(val)
+        }
+      })
+    }else {
+      rest.forEach(val => {
+        var v = iteratee(val)
+        if(!map.includes(v)){
+          map.push(v)
+          ans.push(val)
+        }
+      })
+    }
+    return ans
+  }
+
+  function nth(array, n=0){
+    if(n < 0){
+      return array[array.length + n]
+    } else{
+      return array[n]
+    }
+  }
+
+  function fill(array, value, start=0, end=array.length){
+    for(var i = start; i < end; i++){
+      array[i] = value
+    }
+    return array
+  }
+
+
   return {
     compact,
     chunk,
@@ -157,5 +265,13 @@ var lory02 = function (){
     reverse,
     sortedIndex,
     indexOf,
+    uniq,
+    uniqBy,
+    union,
+    unionBy,
+    nth,
+    fill,
+    differenceWith,
   }
 }()
+
