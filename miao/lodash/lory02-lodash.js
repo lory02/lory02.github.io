@@ -243,6 +243,291 @@ var lory02 = function (){
     return array
   }
 
+  function isFunction(value) {
+    if(Object.prototype.toString.call(value) == "[object Function]"){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function isMap(value) {
+    if(Object.prototype.toString.call(value) == "[object Map]"){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function isNumber(value) {
+    if(Object.prototype.toString.call(value) == "[object Number]"){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function isObject(value) {
+    if(Object.prototype.toString.call(value) == "[object Object]"){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function isSet(value) {
+    if(Object.prototype.toString.call(value) == "[object Set]"){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function isString(value) {
+    if(Object.prototype.toString.call(value) == "[object String]"){
+      return true
+    } else {
+      return false
+    }
+  }
+  
+  function isWeakMap(value) {
+    if(Object.prototype.toString.call(value) == "[object WeakMap]"){
+      return true
+    } else {
+      return false
+    }
+  }
+  
+  function isWeakSet(value) {
+    if(Object.prototype.toString.call(value) == "[object WeakSet]"){
+      return true
+    } else {
+      return false
+    }
+  }
+  
+  function negate(predicate) {
+    return function (...args){  
+      return !predicate(...args)
+    } 
+  }
+  
+  function ary(func, n = func.length) {
+    return function(...args){
+      return func(...args.slice(0,n))
+    }
+  }
+  
+  function unary(func){
+    return ary(func,1)
+  }
+
+  function findIndex(array, predicate=_.identity, fromIndex = 0){
+    if(Object.prototype.toString.call(predicate) == "[object Function]"){
+      for(var i = fromIndex; i < array.length; i++){
+        if(predicate(array[i])){
+          return i
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Object]"){
+      for(var i = fromIndex; i < array.length; i++){
+        var flag = true
+        for(var key in predicate){
+          if(!(key in predicate) || !(array[i][key] == predicate[key])){
+            flag = false
+            break
+          }
+        }
+        if(flag){
+          return i 
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Array]"){
+      for(var i = fromIndex; i < array.length; i++){
+        if(array[i][predicate[0]] == predicate[1] ){
+          return i
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object String]"){
+      for(var i = fromIndex; i < array.length; i++){
+        if(array[i][predicate]){
+          return i
+        }
+      }
+    }
+  }
+
+  function findLastIndex(array, predicate=_.identity, fromIndex=array.length-1) {
+    if(Object.prototype.toString.call(predicate) == "[object Function]"){
+      for(var i = fromIndex; i>=0 ; i--){
+        if(predicate(array[i])){
+          return i
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Object]"){
+      for(var i = fromIndex; i>=0 ; i--){
+        var flag = true
+        for(var key in array[i]){
+          if(!(key in predicate) || !(array[i][key] == predicate[key])){
+            flag = false
+            break
+          }
+        }
+        if(flag){
+          return i 
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Array]"){
+      for(var i = fromIndex; i>=0 ; i--){
+        if(array[i][predicate[0]] == predicate[1] ){
+          return i
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object String]"){
+      for(var i = fromIndex; i>=0 ; i--){
+        if(array[i][predicate]){
+          return i
+        }
+      }
+    }
+  }
+
+  function unzip(array){
+    return array[0].map((_, idx) => {
+      return array.map(row => row[idx])
+    })
+  }
+
+  function without(array, ...values) {
+    return array.filter(val => {
+      return !values.includes(val)
+    })
+  }
+  
+  function zip(...arrays){
+    return arrays[0].map((_, idx) => {
+      return arrays.map(row => row[idx])
+    })
+  }
+  
+  function xor(...arrays){
+    var args = flatten(arrays)
+    var dict = {}
+    for(var arg of args) {
+      dict[arg] = dict[arg] + 1 || 1
+    }
+    return args.filter(val => {
+      return dict[val] == 1
+    })
+  }
+
+  function countBy(collection, iteratee=_.identity){
+    let result = {}
+    if(typeof iteratee == 'function'){
+      for(let item of collection){
+        item = iteratee(item)
+        result[item] = result[item] + 1 || 1 
+      }
+    } else {
+      for(let item of collection){
+        item = item[iteratee]
+        result[item] = result[item] + 1 || 1 
+      }
+    }
+    return result
+  }
+  
+  
+  function every(collection, predicate=_.identity){
+    if(Object.prototype.toString.call(predicate) == "[object Function]"){
+      for(var item of collection){
+        if(!predicate(item)){
+          return false
+        }
+      }
+      return true
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Object]"){
+      for(var item of collection){
+        for(var key in item){
+          if(!(key in predicate) || !(item[key] == predicate[key])){
+            return false
+          }
+        }
+      }
+      return true
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Array]"){
+      for(var item of collection){
+        if(!(item[predicate[0]] == predicate[1])){
+          return false
+        }
+      }
+      return true
+    }
+    if(Object.prototype.toString.call(predicate) == "[object String]"){
+      for(var item of collection){
+        if(!item[predicate]){
+          return false
+        }
+      }
+      return true
+    }
+  }
+
+  function filter(collection, predicate=_.identity){
+    var result = []
+    if(Object.prototype.toString.call(predicate) == "[object Function]"){
+      for(var item of collection){
+        if(predicate(item)){
+          result.push(item)
+        }
+      }
+      return result
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Object]"){
+      for(var item of collection){
+        var flag = true
+        for(var key in predicate){
+          if(!(key in item) || !(predicate[key] == item[key])){
+            flag = false
+            break
+          }
+        }
+        if(flag){
+          result.push(item)
+        }
+      }
+      return result
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Array]"){
+      for(var item of collection){
+        if(item[predicate[0]] == predicate[1]){
+          result.push(item)
+        }
+      }
+      return result
+    }
+    if(Object.prototype.toString.call(predicate) == "[object String]"){
+      for(var item of collection){
+        if(item[predicate]){
+          result.push(item)
+        }
+      }
+      return result
+    }
+  }
+  
+  function find(collection, predicate=_.identity, fromIndex=0){
+    return collection[findIndex(collection, predicate, fromIndex)]
+  }
 
   return {
     compact,
@@ -272,6 +557,27 @@ var lory02 = function (){
     nth,
     fill,
     differenceWith,
+    isFunction,
+    isMap,
+    isNumber,
+    isObject,
+    isSet,
+    isString,
+    isWeakMap,
+    isWeakSet,
+    negate,
+    ary,
+    unary,
+    findIndex,
+    findLastIndex,
+    unzip,
+    without,
+    zip,
+    xor,
+    countBy,
+    every,
+    filter,
+    find,
   }
 }()
 
