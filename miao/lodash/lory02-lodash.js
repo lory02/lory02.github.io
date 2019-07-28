@@ -69,16 +69,17 @@ var lory02 = function (){
     return [].concat(...arr)  
   }
 
-  function flattenDeep(arr) {
-    let res = []
-    for(let item of arr) {
-      if(Array.isArray(item)){
-        let flattened = flattenDeep(item)  
-        res.push(...flattened) 
-      }else {
-        res.push(item)
-      }
+  function flattenDeep(array){
+    let result = []
+    for (let i = 0; i < array.length; i++) {
+        if (Array.isArray(array[i])) {
+            let temp = this.flattenDeep(array[i])
+            result.push(...temp)
+        } else {
+            result.push(array[i])
+        }
     }
+    return result
   }
 
   function flattenDepth(arr , depth = 1) {
@@ -529,6 +530,205 @@ var lory02 = function (){
     return collection[findIndex(collection, predicate, fromIndex)]
   }
 
+  function differenceBy(array, ...values){
+    var iteratee = last(values)
+    values.pop()
+    values = flatten(values)
+    var result = []
+    if(Object.prototype.toString.call(iteratee) == "[object Function]"){
+      for(var item of array){
+        var flag = true
+        for(var val of values){
+          if(iteratee(item) == iteratee(val)){
+            flag = false
+            break
+          }
+        }
+        if(flag){
+          result.push(item)
+        }
+      }
+    }
+    if(Object.prototype.toString.call(iteratee) == "[object String]"){
+      for(var item of array){
+        var flag = true
+        for(var val of values){
+          if(item[iteratee] == val[iteratee]){
+            flag = false
+            break
+          }
+        }
+        if(flag){
+          result.push(item)
+        }
+      }
+    }
+    return result
+   }
+
+   function dropWhile(array, predicate=_.identity){
+    if(Object.prototype.toString.call(predicate) == "[object Function]"){
+      for(var key in array){
+        if(!predicate(array[key])){
+          return array.slice(key)
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Object]"){
+      for(var item in array){
+        for(var key in predicate){
+          if(!(key in array[item]) || !(predicate[key] == array[item][key])){
+            return array.slice(item)
+          }
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Array]"){
+      for(var key in array){
+        if(!(array[key][predicate[0]] == predicate[1])){
+          return array.slice(key)
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object String]"){
+      for(var key in array){
+        if(!array[key][predicate]){
+          return array.slice(key)
+        }
+      }
+    }
+  }
+
+  function dropRightWhile(array, predicate=_.identity) {
+    var arr = reverse(array)
+    return reverse(dropWhile(arr, predicate))
+  } 
+  
+  function flatMap(collection, iteratee=_.identity){
+    var res = []
+    var value
+    for(var item of collection){
+      value = flatten(iteratee(item))
+      res.push(...value)
+    }
+    return res
+  }
+  
+  function flatMapDepth(collection, iteratee=_.identity, depth=1){
+    var res = []
+    var value
+    for(var item of collection){
+      value = flattenDepth(iteratee(item),depth)
+      res.push(...value)
+    }
+    return res
+  }
+
+  function groupBy(collection, iteratee=_.identity) {
+    var map = {}
+    if(Object.prototype.toString.call(iteratee) == "[object Function]"){
+      for(var item of collection){
+        var key = iteratee(item)
+        if(key in map){
+          map[key].push(item)
+        } else {
+          map[key] = [item]
+        }
+      }
+    }
+    if(Object.prototype.toString.call(iteratee) == "[object String]"){
+      for(var item of collection){
+        var key = item[iteratee]
+        if(key in map){
+          map[key].push(item)
+        } else {
+          map[key] = [item]
+        }
+      }
+    } 
+    return map
+  }
+
+  function keyBy(collection, iteratee=_.identity) {
+    var map = {}
+    if(Object.prototype.toString.call(iteratee) == "[object Function]"){
+      for(var item of collection){
+        var key = iteratee(item)
+        map[key] = item
+      }
+    }
+    if(Object.prototype.toString.call(iteratee) == "[object String]"){
+      for(var item of collection){
+        var key = item[iteratee]
+        map[key] = item
+      }
+    } 
+    return map
+  }
+  
+  function map(collection, iteratee=_.identity) {
+    var res = []
+    if(Object.prototype.toString.call(iteratee) == "[object Function]"){
+      for(var item in collection){
+          res.push(iteratee(collection[item]))
+      }
+    }
+  
+    if(Object.prototype.toString.call(iteratee) == "[object String]"){
+      for(var item in collection){
+            res.push(item[iteratee])
+      }
+    }
+    return res
+  }
+  
+  function partition(collection, predicate=_.identity) {
+    var res = []
+    if(Object.prototype.toString.call(predicate) == "[object Function]"){
+      for(var item of collection){
+        if(predicate(item)){
+          res[0] == undefined ? res[0] = [item] : res[0].push(item)
+        } else {
+          res[1] == undefined ? res[1] = [item] : res[1].push(item)
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Object]"){
+      for(var item in collection){
+        var flag = true
+        for(var key in predicate){
+          if(!(key in collection[item]) || !(predicate[key] == collection[item][key])){  //判断是否包含属性
+            res[1] == undefined ? res[1] = [collection[item]] : res[1].push(collection[item])
+            flag = false
+            break
+          }
+        }
+        if(flag){  
+          res[0] == undefined ? res[0] = [collection[item]] : res[0].push(collection[item])
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object Array]"){
+      for(var item of collection){
+        if(item[predicate[0]] == predicate[1]){
+          res[0] == undefined ? res[0] = [item] : res[0].push(item)
+        } else {
+          res[1] == undefined ? res[1] = [item] : res[1].push(item)
+        }
+      }
+    }
+    if(Object.prototype.toString.call(predicate) == "[object String]"){
+      for(var item of collection){
+        if(item[predicate]){
+          res[0] == undefined ? res[0] = [item] : res[0].push(item)
+        } else {
+          res[1] == undefined ? res[1] = [item] : res[1].push(item)
+        }
+      }
+    }
+    return res
+  }
+
   return {
     compact,
     chunk,
@@ -578,6 +778,15 @@ var lory02 = function (){
     every,
     filter,
     find,
+    differenceBy,
+    dropWhile,
+    dropRightWhile,
+    flatMap,
+    flatMapDepth,
+    groupBy,
+    keyBy,
+    map,
+    partition,
   }
 }()
 
