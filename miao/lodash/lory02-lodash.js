@@ -244,84 +244,192 @@ var lory02 = function (){
     return array
   }
 
-  function isFunction(value) {
-    if(Object.prototype.toString.call(value) == "[object Function]"){
-      return true
-    } else {
-      return false
+  function eq(value, other) {
+    if(isNaN(value) && isNaN(other)){
+      return true;
     }
+    return value === other;
   }
 
-  function isMap(value) {
-    if(Object.prototype.toString.call(value) == "[object Map]"){
-      return true
-    } else {
-      return false
+  function gt(value, other) {
+    return value > other
+  }
+  
+  function gte(value, other) {
+    return value >= other;
+  }
+  
+  function isArguments(value) {
+    return typeName(value) == "[object Arguments]"
+  }
+  function isArrayBuffer(val) {
+    return typeName(val) == `[object ArrayBuffer]`
+  }
+
+  function isArrayLike(value) {
+    return !isFunction(value) && isLength(value.length) 
+  }
+
+  function isArrayLikeObject(value) {
+    return isArrayLike(value) && isObjectLike(value); 
+  }
+
+  function isBoolean(val) {
+    return typeName(val) === '[object Boolean]';
+  }
+
+  function isBuffer(val) {
+    return typeName(val) === '[object Buffer]';
+  }
+
+  function isDate(val) {
+    return typeName(val) === '[object Date]';
+  }
+
+  function isElement(val) {
+    return typeName(val).includes('Element');
+  }
+
+  function isEmpty(val) {
+    var c = 0 ;
+    for(var key in val) {  //遍历可枚举属性，length和size是不可枚举属性
+      c++;
     }
+    return c == 0
+  }
+  //深对比（不支持函数和DOM节点比较。）
+  function isEqual(value, other) {
+    if(value === other){  //判断原始类型的值
+      return true;
+    }
+    if(isNaN(value) && isNaN(other)){ //判断NaN
+      return true;
+    }
+    var len1 = 0; 
+    var len2 = 0;
+    for( var k in value) {
+      len1++;
+    } 
+    for(var k in other) {
+      len2++;
+    }
+    if(len1 != len2) { //对象长度相等
+      return false;
+    }
+    for(var key in value){
+      if(!isEqual(value[key], other[key])){  //递归比较值
+        return false
+      }
+    }
+    return true
+  }
+
+  function isError(val) {
+    return typeName(val) === '[object Error]';
+  }
+
+  function isFinite(val) {
+    return Number.isFinite(val);
+  }
+
+  function isFunction(value) {
+    return typeName(value) === "[object Function]"
+  }
+
+  function isInteger(val) {
+    return Number.isInteger(val)
+  }
+
+  function isLength(val) {
+    return isNumber(val) && isInteger(val) && val >= 0 && val <=  Number.MAX_SAFE_INTEGER;
+  } 
+
+  function isMap(value) {
+    return typeName(value) ==="[object Map]"
+  }
+
+  function isMatch(object, source) { //判断source是否为子集
+    for(var key in source){
+      if(!isEqual(object[key], source[key])){ //深对比
+        return false
+      }
+    }
+    return true
+  }
+
+  function isNaN(val) {
+    return isNumber(val) &&  val !== +val; 
+    //!== 自动类型转换，new Number(NaN) 转换为数字比较；或者 val+''
+  }
+
+  function isNil(val) {
+    return val == null;  //null == undefined;
   }
 
   function isNumber(value) {
-    if(Object.prototype.toString.call(value) == "[object Number]"){
-      return true
-    } else {
-      return false
-    }
+    return typeName(value) ==="[object Number]"
   }
 
-  function isObject(value) {
-    if(Object.prototype.toString.call(value) == "[object Object]"){
-      return true
-    } else {
-      return false
-    }
+  function isObject(val) { //typeof val
+    return typeof val === 'object' && val !== null; //排除null
+  }
+
+  function isObjectLike(val) {
+    return isObject(val) && !isFunction(val) ;  //非null和非函数
+  }
+
+  //对象由 Object 构造函数创建，或者 [[Prototype]] 为 null 。
+  function isPlainObject(val) {
+    var proto = Object.getPrototypeOf(val)
+    return Object.getPrototypeOf(proto) === null || proto.constructor === Object;
+    //原型的原型
+  }
+  function isRegExp(val) {
+    return typeName(val) === '[object RexgExp]'
+  }
+
+  function isSafeInteger(val) {
+    return Number.isSafeInteger(val);
   }
 
   function isSet(value) {
-    if(Object.prototype.toString.call(value) == "[object Set]"){
-      return true
-    } else {
-      return false
-    }
+    return typeName(value) === "[object Set]"
   }
 
-  function isString(value) {
-    if(Object.prototype.toString.call(value) == "[object String]"){
-      return true
-    } else {
-      return false
-    }
+  function isString(value) { 
+    return typeName(value) === "[object String]"
   }
   
+  function isSymbol(val) { //独一无二的值
+    return typeName(val) === "[object Symbol]"
+  }
+
   function isWeakMap(value) {
-    if(Object.prototype.toString.call(value) == "[object WeakMap]"){
-      return true
-    } else {
-      return false
-    }
+    return typeName(value) ==="[object WeakMap]"
   }
   
   function isWeakSet(value) {
-    if(Object.prototype.toString.call(value) == "[object WeakSet]"){
-      return true
-    } else {
-      return false
+    return typeName(value) ==="[object WeakSet]"
+  }
+  
+  function isUndefined(val) {  
+    return val === undefined;
+  }
+
+  function lt(value, other) {
+    return value < other;
+  }
+
+  function lte(value, other) {
+    return value <= other;
+  }
+
+  function toArray(val) {
+    var res = [];
+    for(var k in val){
+      res.push(val[k]);
     }
-  }
-  
-  function negate(predicate) {
-    return function (...args){  
-      return !predicate(...args)
-    } 
-  }
-  
-  function ary(func, n = func.length) {
-    return function(...args){
-      return func(...args.slice(0,n))
-    }
-  }
-  
-  function unary(func){
-    return ary(func,1)
+    return res;
   }
 
   function findIndex(array, predicate=_.identity, fromIndex = 0){
@@ -729,7 +837,137 @@ var lory02 = function (){
     return res
   }
 
+  function once(func) {
+    var flag = true
+    return function(arg){
+      if(flag){
+        var result = func(arg)
+        flag = flase
+      }
+      return result
+    }
+  }
+
+  function memoize(func, resolver) {
+    var cache = {}
+    return function(arg) {
+      if(resolver != undefined){
+        if(resolver(arg) in cache){
+          return cache[resolver(arg)]
+        } else {
+          cache[resolver(arg)] = func(arg)
+        }
+      } else {
+        if(arg in cache){
+          return cache[arg]
+        } else {
+          cache[arg] = func(arg)
+        }
+      }
+    }
+  }
+
+  function negate(predicate) {
+    return function (...args){  
+      return !predicate(...args)
+    } 
+  }
+  
+  function ary(func, n = func.length) {
+    return function(...args){
+      return func(...args.slice(0,n))
+    }
+  }
+  
+  function unary(func){
+    return ary(func,1)
+  }
+
+  function after(n, f) {
+    return function(){
+      if(n-- < 0) {
+        return f.apply(this,arguments);
+      }
+    }
+  }
+
+  function before(n, func) {
+    var result 
+    return function() {
+      if(n-- > 0) {
+        result = func.apply(this,arguments);
+      }
+      return result
+    }
+  }
+
+  function bind(func, thisArg, ...partials) {
+    return function(...args) {
+      for(var i = 0; i < partials.length; i++){
+        if(partials[i] == _ ){
+          partials[i] = args.shift(); //填充占位符
+        }
+      }
+      partials.push(...args)
+      return func.apply(thisArg,partials)
+    }
+  }
+
+  function bindKey(obj, key, ...partials) {
+    return bind(obj[key],this,...partials)
+  }
+
+  function curry(func, arity=func.length) {
+    return function(...args) {
+      var newArgs = []
+      args.forEach(val => {  //去掉占位符
+        if(val !== _){
+          newArgs.push(val)
+        }
+      })
+      if(newArgs.length >= arity) {
+        return f(...newArgs);
+      } else {
+        return curry(f.bind(null,...newArgs),length - newArgs.length);//绑定已有参数，传入剩下参数
+      }
+    }
+  }
+
+  function partial(func, ...partials) {
+    return function(...args) {
+       var newArgs = deletePlaceholder(partials,args)
+      return func(...newArgs);
+    }
+  }
+
+  function partialRight(func, ...partials) {
+    return function(...args) {
+      var newArgs = deletePlaceholder(reverse(partials),reverse(args));
+      newArgs = reverse(newArgs)
+      return func(...newArgs);
+    }
+  }
+
+  function deletePlaceholder(arr,args) {
+    arr = arr.slice()
+    args = args.slice()
+    for(var i = 0; i < arr.length; i++) {
+      if(arr[i] == _ ){
+        arr[i] = args.shift();
+      }
+    }
+    arr.push(...args);
+    return arr
+  }
+
+  function typeName(value) {
+    return Object.prototype.toString.call(value)
+  }
+
+  
   return {
+    typeName,
+    deletePlaceholder,
     compact,
     chunk,
     concat,
@@ -787,6 +1025,43 @@ var lory02 = function (){
     keyBy,
     map,
     partition,
+    once,
+    memoize,
+    eq,
+    gt,
+    gte,
+    isArguments,
+    isArrayBuffer,
+    isLength,
+    isInteger,
+    isArrayLike,
+    isObjectLike,
+    isArrayLikeObject,
+    isBoolean,
+    isBuffer,
+    isDate,
+    isElement,
+    isEmpty,
+    isEqual,
+    isError,
+    isFinite,
+    isMatch,
+    isNaN,
+    isNil,
+    isPlainObject,
+    isRegExp,
+    isSafeInteger,
+    isSymbol,
+    isUndefined,
+    lt,
+    lte,
+    toArray,
+    after,
+    before,
+    bind,
+    bindKey,
+    curry,
+    partial,
+    partialRight,
   }
 }()
-
